@@ -13,6 +13,9 @@ cat > network.log << 'EOF'
 2024-01-15 10:33:30 192.168.1.102 DISCONNECT success
 EOF
 
+
+
+
 # 3. 접속 통계 파일 생성
 cat > connections.txt << 'EOF'
 192.168.1.100 5
@@ -36,6 +39,34 @@ network.log 파일을 분석하여 연결 성공/실패 통계를 출력하는 �
 실패: Z건
 성공률: W%
 
+### 내부 .sh 파일 코드
+```shell
+V_con=$(grep "success" network.log | wc -l)
+V_uncon=$(grep "failed" network.log | wc -l)
+V_total=$(wc -l < network.log)
+
+V_per=$(($V_con * 100 / $V_total))
+
+
+echo "=== 네트워크 연결 분석 결과 ==="
+echo "전체 연결 시도: $V_total 건"
+echo "성공: $V_con 건"
+echo "실패: $V_uncon 건"
+echo "성공률 : $V_per %"
+~                                                                                                                
+~                             
+```
+### 결과값
+```shell
+[im@localhost network]$ source network2.sh
+=== 네트워크 연결 분석 결과 ===
+전체 연결 시도: 8 건
+성공: 6 건
+실패: 2 건
+성공률 : 75 %
+
+```
+
 제한사항:
 if문과 변수만 사용
 grep, wc, cut 명령어 활용
@@ -56,6 +87,39 @@ network.log에서 IP 주소별 접속 횟수를 계산
 if문과 변수만 사용
 cut, sort, uniq, grep 명령어 활용
 head나 tail로 결과 제한
+
+### 내부 .sh 파일 코드
+```shell
+f_ip=$(cut -d " " -f3 network.log | sort | uniq -c | head -n 1 | awk '{print $2}')
+s_ip=$(cut -d " " -f3 network.log | sort | uniq -c | head -n 2 | tail -n 1 | awk '{print $2}')
+t_ip=$(cut -d " " -f3 network.log | sort | uniq -c | head -n 3 | tail -n 1 | awk '{print $2}')
+
+
+f_count=$(cut -d " " -f3 network.log | sort | uniq -c | head -n 1 | awk '{print $1}')
+s_count=$(cut -d " " -f3 network.log | sort | uniq -c | head -n 1 | awk '{print $1}')
+t_count=$(cut -d " " -f3 network.log | sort | uniq -c | head -n 1 | awk '{print $1}')
+
+f_time=$(cut -d " " -f2 network.log | sort | uniq -c | head -n 1 | awk '{print $2}')
+s_time=$(cut -d " " -f2 network.log | sort | uniq -c | head -n 2 | tail -n 1 | awk '{print $2}')
+t_time=$(cut -d " " -f2 network.log | sort | uniq -c | head -n 3 | tail -n 1 | awk '{print $2}')
+
+
+echo "=== 접속 빈도 TOP 3 ==="
+
+echo "1위: $f_ip ($f_count회) - 첫 접속: $f_time"
+echo "2위: $s_ip ($s_count회) - 첫 접속: $s_time"
+echo "3위: $t_ip ($t_count회) - 첫 접속: $t_time"
+```
+
+### 결과값
+```shell
+[im@localhost network]$ source ipcount.sh
+=== 접속 빈도 TOP 3 ===
+1위: 192.168.1.100 (2회) - 첫 접속: 10:30:25
+2위: 192.168.1.101 (2회) - 첫 접속: 10:30:30
+3위: 192.168.1.102 (2회) - 첫 접속: 10:31:15
+
+```
 
 문제 3: 서버 상태 점검 스크립트
 요구사항:
