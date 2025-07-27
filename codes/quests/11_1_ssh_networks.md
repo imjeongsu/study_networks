@@ -135,6 +135,29 @@ OR
 === 서버 상태 점검 결과 ===
 [오프라인] db01 (123.92.0.11) - 응답없음
 ...
+### 내부 .sh 파일 코드
+```shell
+ping=$(ping -c 1 $1 | grep "ms" )
+
+if [ -n "$ping" ]; then
+        echo "정상"
+else    
+        echo "비정상, 확인바람"
+        
+fi
+```
+
+### 결과값
+```shell
+[im@localhost network]$ source servers.sh 192.168.3.128
+정상
+[im@localhost network]$ source servers.sh 192.164.456.123
+ping: 192.164.456.123: Name or service not known
+비정상, 확인바람
+```
+
+
+
 
 제한사항:
 if문과 변수만 사용
@@ -161,6 +184,18 @@ if문과 변수만 사용
 cut, sort 명령어 활용
 숫자 비교를 위한 조건문 사용
 
+
+
+### 내부 .sh 파일 코드
+### 결과값
+
+
+
+
+
+
+
+
 문제 5: 현재 시스템 네트워크 정보 수집기
 요구사항:
 현재 시스템의 IP 주소, 기본 게이트웨이, 활성 인터페이스 개수를 출력
@@ -185,3 +220,5 @@ if문 조건 확인 시 [ ] 사용
 명령어 결과를 변수에 저장할 때 $(command) 사용
 파일 존재 여부 확인: [ -f filename ]
 
+### 내부 .sh 파일 코드
+### 결과값
