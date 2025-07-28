@@ -54,6 +54,11 @@ elif [ "$1" == "restart" ]; then
 elif [ "$1" == "stop" ]; then
         kill -9 "$PID"
         echo "서버가 종료되었습니다."
+else
+        tail -f "$1"
+
+fi
+
 
 ```
 
