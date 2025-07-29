@@ -86,9 +86,9 @@ $ ./kill_port.sh 9999
 ```shell
 search_ip=$(lsof -i:$1)  # 입력받은 인자값 (포트) 찾기
 PID=$(lsof -i:$1 | cut -d " " -f2) # 입력받은 포트에 대한 PID 값
-name=$(lsof -i:8080 | awk '{print $9}' | tail -n 1)
+name=$(lsof -i:8080 | awk '{print $9}' | tail -n 1) # lsof를 통해 해당 포트에 해당하는 정보 출력하여 awk,tail을 통해 프로세스 이름 필터링
 
-if [ -n search_ip ]; then
+if [ -n search_ip ]; then 
         echo  "포트 "$1" 사용 프로세스 검색 중..."
         echo "발견된 프로세스:  "$PID", 프로세스명: "$name" "
         kill -9 "$PID"
@@ -96,8 +96,8 @@ if [ -n search_ip ]; then
         echo "포트 "$1"이 해제되었습니다."
         
 else    
-        echo "포트 9999 사용 프로세스 검색 중..."
-        echo "포트 9999를 사용하는 프로세스가 없습니다."
+        echo "포트 "$1" 사용 프로세스 검색 중..."
+        echo "포트 "$1"를 사용하는 프로세스가 없습니다."
         
 fi
 ```
