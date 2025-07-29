@@ -13,8 +13,9 @@ $ sudo ./problem1.sh
 ## problem1.sh 내부 스크립트
 ```shell
 check_rule=$(sudo firewall-cmd --list-rich-rules)
+# 현재 rich rule 에 존재하는 값 출력
 
-if [ -z $check_rule ]; then
+if [ -z $check_rule ]; then #rich rule에 문자열 존재하는지 판단 
         echo "[INFO] 현재 rich rule 목록에 192.168.0.100 차단 룰이 존재하지 않습니다."
         echo "[INFO] 차단 룰을 추가합니다..."
         sudo firewall-cmd --permanent --add-rich-rule='rule family="ipv4" source address="192.168.0.100" reject'
@@ -56,7 +57,7 @@ $ sudo ./problem2.sh
 ## problem2.sh 내부 스크립트
 ```shell
 check_port=$(sudo firewall-cmd --permanent --list-port)
-
+# 열려있는 포트여부 확인
 if [ -n $check_port ]; then
         echo "[INFO] 포트 8080/tcp 이 열려 있습니다. 제거합니다..."
         sudo firewall-cmd --permanent --remove-port=8080/tcp
