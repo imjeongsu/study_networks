@@ -41,9 +41,9 @@ network.log 파일을 분석하여 연결 성공/실패 통계를 출력하는 �
 
 ### 내부 .sh 파일 코드
 ```shell
-V_con=$(grep "success" network.log | wc -l)
-V_uncon=$(grep "failed" network.log | wc -l)
-V_total=$(wc -l < network.log)
+V_con=$(grep "success" network.log | wc -l) # 연결 성공된 log만 출력하고 line 수를 확인하여 연결성공횟수 출력
+V_uncon=$(grep "failed" network.log | wc -l) # 연결 실패한 log만 출력하고 line 수를 확인하여 연결실패횟수 출력
+V_total=$(wc -l < network.log) 
 
 V_per=$(($V_con * 100 / $V_total))
 
